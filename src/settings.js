@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'hrsaas',
+  title: '帝可得',
 
   /**
    * @type {boolean} true | false
