@@ -154,7 +154,7 @@ export default {
 .body{
   width: 100%;
   height: 100%;
-  background: url('../../assets/background.be4fae7d.png') no-repeat;
+  background: url('../../assets/background.be4fae7d.png') no-repeat center;
 
   .login-box{
     position: absolute;
@@ -188,7 +188,7 @@ export default {
     }
   }
 }
-      ::v-deep .el-input__inner{
+  ::v-deep .el-input__inner{
         height: 52px;
-      }
+  }
 </style>
