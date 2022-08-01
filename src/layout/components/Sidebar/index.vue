@@ -54,3 +54,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.sidebar-container{
+  top: 50px;
+}
+</style>

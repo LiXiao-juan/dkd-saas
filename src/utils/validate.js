@@ -19,11 +19,11 @@ export function validUsername(str) {
   return valid_map.indexOf(str.trim()) >= 0
 }
 
-/**
- *
- * @param {string} str
- * @returns {Boolean}
- */
-export function validUserCode(str) {
-  return /^[A-Za-z0-9]*4$/.test(str)
-}
+// /**
+//  *
+//  * @param {string} str
+//  * @returns {Boolean}
+//  */
+// export function validUserCode(str) {
+//   return /^[A-Za-z0-9]*4$/.test(str)  
+// }
