@@ -63,6 +63,7 @@
             el-icon-circle-check"
             maxlength="4"
             placeholder="请输入验证码"
+            @keyup.enter="toLogin"
           />
         </el-form-item>
         <img
@@ -163,11 +164,14 @@ export default {
       });
     },
     async toLogin() {
-      // this.loginForm = this.loginForm.clientToken =
-      //   this.$store.state.user.cliToken;
-      await this.$refs.loginForm.validate();
-      this.userLogin(this.loginForm);
-      this.$router.push("/home");
+      this.loading = true;
+      try {
+        await this.$refs.loginForm.validate();
+        await this.userLogin(this.loginForm);
+      } finally {
+        this.loading = false;
+      }
+      // this.$router.push("/home");
     },
   },
   computed: {

@@ -31,3 +31,15 @@ export const login = (loginName, password, code, clientToken) => {
     },
   });
 };
+
+/**
+ *  获取用户信息
+ * @param {*} id 用户id
+ * @returns  Promise
+ */
+export const getUserInfo = (id) => {
+  return request({
+    url: "/user-service/user/" + id,
+    method: "GET",
+  });
+};

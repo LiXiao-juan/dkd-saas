@@ -1,78 +1,66 @@
 <template>
-  <el-breadcrumb class="app-breadcrumb" separator="/">
-    <transition-group name="breadcrumb">
-      <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
-        <span v-if="item.redirect==='noRedirect'||index==levelList.length-1" class="no-redirect">{{ item.meta.title }}</span>
-        <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
-      </el-breadcrumb-item>
-    </transition-group>
-  </el-breadcrumb>
+  <div class="box">
+    <img src="../../assets/logo.png" alt="" class="logo" />
+    <!-- 用户信息区域 -->
+    <div class="user-info">
+      <!-- 头像区域 -->
+      <img src="../../assets/user.png" alt="" />
+      <!-- 信息 -->
+      <p>欢迎您~~ {{ $store.state.user.userInfo.loginName }}</p>
+      <!-- 退出 -->
+      <div class="logout" @click="toLogin">
+        <p>退出</p>
+        <i class="el-icon-caret-bottom"></i>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import pathToRegexp from 'path-to-regexp'
-
+// import { mapActions } from "vuex";
 export default {
+  components: {},
   data() {
-    return {
-      levelList: null
-    }
-  },
-  watch: {
-    $route() {
-      this.getBreadcrumb()
-    }
+    return {};
   },
   created() {
-    this.getBreadcrumb()
+    // this.getUserInfo();
   },
   methods: {
-    getBreadcrumb() {
-      // only show routes with meta.title
-      let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
-      const first = matched[0]
-
-      if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: 'Dashboard' }}].concat(matched)
-      }
-
-      this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
+    // ...mapActions("user", ["getUserInfo"]),
+    //退出账号
+    async toLogin() {
+      await this.$store.dispatch("user/logout");
+      this.$router.push("/login");
     },
-    isDashboard(route) {
-      const name = route && route.name
-      if (!name) {
-        return false
-      }
-      return name.trim().toLocaleLowerCase() === 'Dashboard'.toLocaleLowerCase()
-    },
-    pathCompile(path) {
-      // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
-      const { params } = this.$route
-      var toPath = pathToRegexp.compile(path)
-      return toPath(params)
-    },
-    handleLink(item) {
-      const { redirect, path } = item
-      if (redirect) {
-        this.$router.push(redirect)
-        return
-      }
-      this.$router.push(this.pathCompile(path))
-    }
-  }
-}
+  },
+  computed: {},
+};
 </script>
 
-<style lang="scss" scoped>
-.app-breadcrumb.el-breadcrumb {
-  display: inline-block;
+<style scoped lang="scss">
+.box {
+  height: 100%;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
   font-size: 14px;
-  line-height: 50px;
-  margin-left: 8px;
-
-  .no-redirect {
-    color: #97a8be;
-    cursor: text;
+}
+.logo {
+  width: 80px;
+}
+.user-info {
+  width: 300px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  .logout {
+    display: flex;
+    cursor: pointer;
   }
 }
 </style>
