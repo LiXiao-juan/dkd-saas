@@ -14,26 +14,15 @@ import router from "./router";
 
 import "@/icons"; // icon
 import "@/permission"; // permission control
-
-// 路由守卫
-// router.beforeEach((to, from, next) => {
-//   if (!!store.state.user.token.token) {
-//     if (to.path === "/login") {
-//       //  表示去的是登录页
-//       next("/home"); // 跳到主页
-//     } else {
-//       next(); // 直接放行
-//     }
-//   } else {
-//     // next("/login");
-//     next()
-//   }
-// });
+import * as directives from "./directives";
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale });
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
+for (let k in directives) {
+  Vue.directive(k, directives[k]);
+}
 
 Vue.config.productionTip = false;
 

@@ -1,6 +1,7 @@
 import { imgCode, login, getUserInfo } from "@/api/user";
 import router from "@/router";
 import { Message } from "element-ui";
+import { setTokenTime } from "@/utils/auth";
 export default {
   namespaced: true,
   state: {
@@ -57,6 +58,7 @@ export default {
             type: "success",
           });
           context.commit("SETTOKEN", res.data);
+          setTokenTime();
           router.push("/home");
         }
       } catch (error) {}
