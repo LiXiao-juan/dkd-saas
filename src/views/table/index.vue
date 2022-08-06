@@ -120,8 +120,9 @@ export default {
 .result {
   padding: 20px 15px 19px 17px;
   background-color: #fff;
-  min-height: 596px;
+  min-height: 680px;
   width: 100%;
+  // min-width: 1680px;
 }
 .search-button {
   margin-left: 10px;
@@ -162,5 +163,8 @@ export default {
 }
 .item-margin {
   margin-left: 30px;
+}
+.block {
+  margin-top: 40px;
 }
 </style>

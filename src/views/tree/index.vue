@@ -1,109 +1,91 @@
 <template>
   <div class="app-container">
     <!-- 搜索区域 -->
-    <div class="search">
-      <div class="text">工单编号：</div>
-      <el-input v-model="controlNo" placeholder="请输入"></el-input>
-
-      <div class="text">工单状态：</div>
-      <el-input v-model="controlNo" placeholder="请输入"></el-input>
-
-      <el-button size="small" class="search-button">
-        <i class="el-icon-search"></i>
-        查询
-      </el-button>
-    </div>
-
+    <Search @searchList="searchList"></Search>
     <!-- 下半区域 -->
     <div class="result">
-      <el-button size="small" class="new-button">
+      <el-button size="small" class="new-button" @click="popup = true">
         <i class="el-icon-circle-plus-outline"></i>
         新建
       </el-button>
+
+      <!--工单配置  -->
       <el-button size="small" class="deploy-button"> 工单配置 </el-button>
       <br />
-      <!-- 表单区域 -->
-      <div class="tab-header">
-        <el-row>
-          <el-col :span="1"><div class="grid-content">序号</div></el-col>
-          <el-col :span="3"><div class="grid-content">工单编号</div></el-col>
-          <el-col :span="3"><div class="grid-content">设备编号</div></el-col>
-          <el-col :span="3"> <div class="grid-content">工单类型</div></el-col>
-          <el-col :span="3"><div class="grid-content">工单方式</div></el-col>
-          <el-col :span="4"><div class="grid-content">工单状态</div></el-col>
-          <el-col :span="3"
-            ><div class="grid-content bg-purple-light">运营人员</div></el-col
-          >
-          <el-col :span="2"
-            ><div class="grid-content bg-purple-light">创建 日期</div></el-col
-          >
-          <el-col :span="2"
-            ><div class="grid-content bg-purple-light">操作</div></el-col
-          >
-        </el-row>
-      </div>
+      <!-- 新建的弹框组件 -->
+      <AddTask :Visible="popup"></AddTask>
       <!-- 表格区域 -->
-      <el-table
-        :show-header="false"
-        :data="taskList"
-        style="width: 100%"
-        :border="false"
-        class="font"
-        :header-row-style="{ background: '#f3f6fb' }"
-      >
-        <el-table-column prop="createType" label="序号" width="50" class="font">
-        </el-table-column>
-        <el-table-column prop="taskCode" label="工单编号" width="150">
-        </el-table-column>
-        <el-table-column prop="innerCode" label="设备编号" width="150">
-        </el-table-column>
-        <el-table-column prop="taskType.typeName" label="工单类型" width="150">
-        </el-table-column>
-        <el-table-column prop="createType" label="工单方式" width="150">
-        </el-table-column>
-        <el-table-column
-          prop="taskStatusTypeEntity.statusName"
-          label="工单状态"
-          width="150"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="userName"
-          label="运营人员"
-          width="150"
-          class="item-margin"
-        >
-        </el-table-column>
-        <el-table-column prop="createTime" label="创建日期" width="150">
-        </el-table-column>
-        <el-table-column prop="zip" label="操作" width="150">
-          <span class="watch-info">查看详情</span>
-        </el-table-column>
-      </el-table>
+      <Table :taskList="taskList"></Table>
+
+      <!-- 分页 -->
+      <div class="block">
+        <!-- <span class="demonstration">大于 7 页时的效果</span> -->
+        <center>
+          <el-pagination
+            layout="prev, pager, next"
+            :total="total"
+            small
+            @current-change="laypage"
+          >
+          </el-pagination>
+        </center>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import dayjs from "dayjs";
 // import { getList } from "@/api/table";
-import { mapActions } from "vuex";
+import Table from "@/components/table";
+import Search from "@/components/Search";
+import AddTask from "../table/components/addtasks.vue";
+import { mapActions, mapState } from "vuex";
+import { getTasksList } from "@/api/tickets";
 export default {
   data() {
     return {
       controlNo: "",
       taskList: [],
-      currentPage1: 5
+      totalCount: 0,
+      status: "",
+      popup: false,
     };
   },
-  components: {},
-  async created() {
-    await this.getTaskList();
-    this.taskList = this.$store.state.tickets.taskObj.currentPageRecords;
-    console.log(this.taskList);
+  components: {
+    Table,
+    Search,
+    AddTask,
+  },
+  created() {
+    this.getTaskssList();
   },
   methods: {
-    ...mapActions("tickets", ["getTaskList"]),
+    ...mapActions("tickets", ["getTaskList", "setTasksList"]),
+    // 获取工单列表
+    async getTaskssList() {
+      await this.getTaskList();
+      this.taskList = this.$store.state.tickets.taskList;
+    },
 
+    // 分页
+    async laypage(num) {
+      const { data } = await getTasksList({
+        pageIndex: num,
+        pageSize: 10,
+        isRepair: true,
+        status: this.status,
+      });
+      this.taskList = data.currentPageRecords;
+    },
+    // 搜索列表
+    searchList(list, status) {
+      this.taskList = list;
+      this.status = status;
+    },
+  },
+  computed: {
+    ...mapState("tickets", ["total"]),
   },
 };
 </script>
@@ -132,8 +114,9 @@ export default {
 .result {
   padding: 20px 15px 19px 17px;
   background-color: #fff;
-  min-height: 596px;
+  min-height: 680px;
   width: 100%;
+  // min-width: 1680px;
 }
 .search-button {
   margin-left: 10px;
@@ -174,5 +157,8 @@ export default {
 }
 .item-margin {
   margin-left: 30px;
+}
+.block {
+  margin-top: 40px;
 }
 </style>

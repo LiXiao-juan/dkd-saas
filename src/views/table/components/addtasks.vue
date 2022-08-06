@@ -1,12 +1,12 @@
 <template>
   <div>
     <!-- Form -->
-    <el-dialog title="收货地址" :visible="Visible">
+    <el-dialog title="新增工单" :visible="Visible">
       <el-form :model="form">
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
+        <el-form-item label="设备编号" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
+        <el-form-item label="工单类型" :label-width="formLabelWidth">
           <el-select v-model="form.region" placeholder="请选择活动区域">
             <el-option label="区域一" value="shanghai"></el-option>
             <el-option label="区域二" value="beijing"></el-option>
@@ -14,8 +14,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
+        <el-button @click="$parent.Visible = false">取 消</el-button>
+        <el-button type="primary" @click="$parent.Visible = false"
           >确 定</el-button
         >
       </div>
@@ -42,11 +42,11 @@ export default {
       formLabelWidth: "120px",
     };
   },
-  props:{
-    Visible:{
-      type:Boolean,
-      default: false
-    }
+  props: {
+    Visible: {
+      type: Boolean,
+      default: false,
+    },
   },
   created() {},
   methods: {},
