@@ -20,6 +20,7 @@ const service = axios.create({
 
 // request interceptor 请求拦截器
 service.interceptors.request.use(async (config) => {
+  // console.log(222);
   if (!store.state.user.token.token) return config;
 
   if (isTimeout()) {
